@@ -2,7 +2,11 @@
 
 name = "beanstalkd"
 version = "0.0.0"
+
 authors = ["Johannes Schickling <schickling.j@gmail.com>"]
 description = "Easy-to-use beanstalkd client for Rust (IronMQ compatible)"
 keywords = ["beanstalkd", "queue", "worker", "ironmq"]
+
+repository = "https://github.com/schickling/rust-beanstalkd"
+homepage = "https://github.com/schickling/rust-beanstalkd"
 license = "MIT"
