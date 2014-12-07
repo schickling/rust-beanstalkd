@@ -1,8 +1,5 @@
-
 use connection::Connection;
 use error::BeanstalkdResult;
-use response::{Response, Status};
-use request::Request;
 
 pub struct Tube {
     connection: Connection,

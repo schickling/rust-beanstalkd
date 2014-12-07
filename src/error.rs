@@ -1,7 +1,5 @@
 use std::error::Error;
 
-use response::Response;
-
 #[deriving(PartialEq, Eq, Clone, Show)]
 pub struct BeanstalkdError;
 

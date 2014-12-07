@@ -1,4 +1,4 @@
-use std::io::{BufferedStream, TcpStream, IoResult};
+use std::io::{BufferedStream, TcpStream};
 
 use error::{BeanstalkdError, BeanstalkdResult};
 use request::Request;

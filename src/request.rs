@@ -13,8 +13,8 @@ impl<'a> Request<'a> {
     }
 
     pub fn send (&mut self, message: &[u8], read_body: bool) -> BeanstalkdResult<Response> {
-        self.stream.write(message);
-        self.stream.flush();
+        let _ = self.stream.write(message);
+        let _ = self.stream.flush();
 
         let line = match self.stream.read_line() {
             Ok(r) => r,
