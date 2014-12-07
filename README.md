@@ -10,3 +10,42 @@ Add this dependency to your `Cargo.toml`
 ```
 beanstalkd = "~0.0.0"
 ```
+
+## Usage
+
+#### Producer
+
+```rs
+extern crate beanstalkd;
+
+use beanstalkd::{Connection, Tube};
+
+let connection = Connection::new("localhost", 11300).unwrap();
+let mut tube = Tube::new(connection, "default");
+tube.put(b"Hello World \n This is a new line!", 0, 0, 10000);
+```
+
+#### Consumer
+
+```rs
+extern crate beanstalkd;
+
+use beanstalkd::{Connection, Tube};
+
+let connection = Connection::new("localhost", 11300).unwrap();
+let mut tube = Tube::new(connection, "default");
+match tube.reserve().unwrap() {
+    Some((id, body)) => tube.delete(id),
+    None => {},
+}
+```
+
+#### IronMQ
+
+```rs
+// TODO
+```
+
+## License
+
+[MIT License](http://opensource.org/licenses/MIT)
