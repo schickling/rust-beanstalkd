@@ -1,5 +1,6 @@
-use std::io::{BufferedStream, TcpStream, IoResult};
+use std::io::{BufferedStream, TcpStream};
 
+use error::{BeanstalkdError, BeanstalkdResult};
 use response::{Response, Status};
 
 pub struct Request<'a> {
@@ -11,53 +12,54 @@ impl<'a> Request<'a> {
         Request { stream: stream }
     }
 
-    pub fn send (&mut self, message: &[u8], read_body: bool) -> IoResult<Response> {
+    pub fn send (&mut self, message: &[u8], read_body: bool) -> BeanstalkdResult<Response> {
         self.stream.write(message);
         self.stream.flush();
 
         let line = match self.stream.read_line() {
             Ok(r) => r,
-            Err(e) => { return Err(e); },
+            Err(_) => { return Err(BeanstalkdError); },
         };
-        println!("{}", line);
 
         let trimmed_line = line.as_slice().trim_right();
-        let fields: Vec<&str> = line.split(' ').collect();
+        let fields: Vec<&str> = trimmed_line.split(' ').collect();
 
-        if fields.len() < 2 {
-            return Err()
+        if fields.len() < 1 {
+            return Err(BeanstalkdError);
         }
 
-        if read_body {
+        let status = match fields[0] {
+            "OK" => Status::OK,
+            "RESERVED" => Status::RESERVED,
+            "INSERTED" => Status::INSERTED,
+            "TIMED_OUT" => Status::TIMED_OUT,
+            _ => Status::NOT_IMPLEMENTED,
+        };
 
-        
+        let mut id = None;
+        let mut body = None;
+
+        if status != Status::TIMED_OUT {
+            if fields.len() < 2 {
+                return Err(BeanstalkdError);
+            }
+
+            id = from_str(fields[1]);
+
+            if read_body {
+                if fields.len() < 3 {
+                    return Err(BeanstalkdError);
+                }
+
+
+                let num_bytes = from_str::<uint>(fields[fields.len()-1]).unwrap();
+                let utf8_payload = self.stream.read_exact(num_bytes + 2).unwrap();
+                let payload = String::from_utf8(utf8_payload).unwrap().as_slice().trim_right().to_string();
+                body = Some(payload);
+            }
         }
 
-
-        //if fields.len() > 0 {
-
-            //let status = match fields[0] {
-                //"OK" => Status::OK,
-                //"RESERVED" => Status::RESERVED,
-                //"INSERTED" => Status::INSERTED,
-                //"NOT_IMPLEMENTED" => Status::NOT_IMPLEMENTED,
-            //};
-
-
-
-            ////match fields[0] {
-                ////"OK" | "FOUND" | "RESERVED" => {
-                    ////let bytes = from_str::<uint>(fields[fields.len()-1]).unwrap();
-                    ////let payload = self.stream.read_exact(bytes+2).unwrap();
-                    ////println!("{}", String::from_utf8(payload).unwrap().as_slice().trim_right());
-                ////},
-                ////_ => {}
-            ////}
-        //}
-
-
-        let response = Response::new(Status::OK, 1, trimmed_line.to_string());
-
+        let response = Response::new(status, id, body);
         Ok(response)
     }
 }

@@ -1,6 +1,6 @@
-use std::io::{IoResult};
 
 use connection::Connection;
+use error::BeanstalkdResult;
 use response::{Response, Status};
 use request::Request;
 
@@ -17,24 +17,30 @@ impl Tube {
         }
     }
 
-    pub fn put (&mut self, body: &[u8], priority: u32, delay: u32, ttr: u32) -> IoResult<u64> {
-        let result = self.connection.cmd("put", vec!(priority.to_string(), delay.to_string(), ttr.to_string(), body.len().to_string()), body);
+    pub fn put (&mut self, body: &[u8], priority: u32, delay: u32, ttr: u32) -> BeanstalkdResult<u64> {
+        let result = self.connection.cmd("put", vec!(priority.to_string(), delay.to_string(), ttr.to_string(), body.len().to_string()), body, false);
         match result {
-            Ok(r) => Ok(r.id),
+            Ok(r) => Ok(r.id.unwrap()),
             Err(e) => Err(e),
         }
     }
 
-    pub fn reserve (&mut self, seconds: u32) -> IoResult<(u64, String)> {
-        let result = self.connection.cmd("reserve-with-timeout", vec!(seconds.to_string()), &[]);
+    pub fn reserve (&mut self) -> BeanstalkdResult<Option<(u64, String)>> {
+        let result = self.connection.cmd("reserve", vec!(), &[], true);
         match result {
-            Ok(r) => Ok((r.id, r.body)),
+            Ok(r) => {
+                if r.id.is_some() && r.body.is_some() {
+                    Ok(Some((r.id.unwrap(), r.body.unwrap())))
+                } else {
+                    Ok(None)
+                }
+            },
             Err(e) => Err(e),
         }
     }
 
-    pub fn delete (&mut self, id: u64) -> IoResult<()> {
-        let result = self.connection.cmd("delete", vec!(id.to_string()), &[]);
+    pub fn delete (&mut self, id: u64) -> BeanstalkdResult<()> {
+        let result = self.connection.cmd("delete", vec!(id.to_string()), &[], false);
         match result {
             Ok(_) => Ok(()),
             Err(e) => Err(e),
