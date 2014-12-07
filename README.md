@@ -1,4 +1,4 @@
-rust-beanstalkd
+rust-beanstalkd [![Build Status](https://travis-ci.org/schickling/rust-beanstalkd.svg)](https://travis-ci.org/schickling/rust-beanstalkd)
 ===============
 
 Easy-to-use beanstalkd client for Rust (IronMQ compatible)
