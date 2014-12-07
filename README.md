@@ -37,10 +37,10 @@ let mut tube = Tube::new(connection, "default");
 match tube.reserve().unwrap() {
     Some((id, body)) => tube.delete(id),
     None => {},
-}
+};
 ```
 
-#### IronMQ
+#### IronMQ example
 
 ```rs
 // TODO
