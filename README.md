@@ -11,6 +11,10 @@ Add this dependency to your `Cargo.toml`
 beanstalkd = "~0.0.0"
 ```
 
+## Documentation
+
+More documentation can be found [here](http://schickling.me/rust-beanstalkd).
+
 ## Usage
 
 #### Producer
