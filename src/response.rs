@@ -1,4 +1,4 @@
-#[deriving(PartialEq, Show)]
+#[derive(PartialEq, Show)]
 pub enum Status {
     OK,
     RESERVED,

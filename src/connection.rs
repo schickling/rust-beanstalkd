@@ -19,7 +19,7 @@ impl Connection {
     }
 
     pub fn cmd(&mut self, op: &str, args: Vec<String>, data: &[u8], read_body: bool) -> BeanstalkdResult<Response> {
-        let args_string = args.iter().fold(String::new(), |a, b| a + " " + b);
+        let args_string = args.iter().fold(String::new(), |a, b| a + " " + b.as_slice());
         let line_break = b"\r\n";
 
         let mut message: Vec<u8> = vec!();

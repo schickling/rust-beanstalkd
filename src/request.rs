@@ -1,4 +1,5 @@
 use std::io::{BufferedStream, TcpStream};
+use std::str::FromStr;
 
 use error::{BeanstalkdError, BeanstalkdResult};
 use response::{Response, Status};
@@ -44,15 +45,14 @@ impl<'a> Request<'a> {
                 return Err(BeanstalkdError);
             }
 
-            id = from_str(fields[1]);
+            id = FromStr::from_str(fields[1]);
 
             if read_body {
                 if fields.len() < 3 {
                     return Err(BeanstalkdError);
                 }
 
-
-                let num_bytes = from_str::<uint>(fields[fields.len()-1]).unwrap();
+                let num_bytes: usize = FromStr::from_str(fields[fields.len()-1]).unwrap();
                 let utf8_payload = self.stream.read_exact(num_bytes + 2).unwrap();
                 let payload = String::from_utf8(utf8_payload).unwrap().as_slice().trim_right().to_string();
                 body = Some(payload);

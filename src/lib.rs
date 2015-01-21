@@ -1,5 +1,3 @@
-#![feature(macro_rules)]
-
 pub use connection::Connection;
 pub use error::BeanstalkdResult;
 pub use tube::Tube;
