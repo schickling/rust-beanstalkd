@@ -3,8 +3,7 @@ pub enum Status {
     OK,
     RESERVED,
     INSERTED,
-    TIMED_OUT,
-    NOT_IMPLEMENTED,
+    USING,
 }
 
 pub struct Response {

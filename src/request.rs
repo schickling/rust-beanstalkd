@@ -14,42 +14,43 @@ impl<'a> Request<'a> {
     }
 
     pub fn send (&mut self, message: &[u8], read_body: bool) -> BeanstalkdResult<Response> {
-        let _ = self.stream.write(message);
-        let _ = self.stream.flush();
+        self.stream.write(message);
+        self.stream.flush();
 
         let line = match self.stream.read_line() {
             Ok(r) => r,
-            Err(_) => { return Err(BeanstalkdError); },
+            Err(_) => { return Err(BeanstalkdError::RequestError); },
         };
+
+        println!("{}", line);
 
         let trimmed_line = line.as_slice().trim_right();
         let fields: Vec<&str> = trimmed_line.split(' ').collect();
 
         if fields.len() < 1 {
-            return Err(BeanstalkdError);
+            return Err(BeanstalkdError::RequestError);
         }
 
         let status = match fields[0] {
-            "OK" => Status::OK,
             "RESERVED" => Status::RESERVED,
             "INSERTED" => Status::INSERTED,
-            "TIMED_OUT" => Status::TIMED_OUT,
-            _ => Status::NOT_IMPLEMENTED,
+            "USING" => Status::USING,
+            _ => { return Err(BeanstalkdError::RequestError) },
         };
 
         let mut id = None;
         let mut body = None;
 
-        if status != Status::TIMED_OUT {
+        if status != Status::USING {
             if fields.len() < 2 {
-                return Err(BeanstalkdError);
+                return Err(BeanstalkdError::RequestError);
             }
 
             id = FromStr::from_str(fields[1]);
 
             if read_body {
                 if fields.len() < 3 {
-                    return Err(BeanstalkdError);
+                    return Err(BeanstalkdError::RequestError);
                 }
 
                 let num_bytes: usize = FromStr::from_str(fields[fields.len() - 1]).unwrap();

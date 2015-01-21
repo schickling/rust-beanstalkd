@@ -1,11 +1,9 @@
 #![allow(unstable)]
 
-pub use connection::Connection;
-pub use error::BeanstalkdResult;
-pub use tube::Tube;
+pub use beanstalkd::Beanstalkd;
 
-mod connection;
+mod beanstalkd;
 mod error;
 mod request;
 mod response;
-mod tube;
+mod commands;
