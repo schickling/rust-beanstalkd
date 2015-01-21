@@ -22,11 +22,12 @@ More documentation can be found [here](http://schickling.me/rust-beanstalkd).
 ```rs
 extern crate beanstalkd;
 
-use beanstalkd::{Connection, Tube};
+use beanstalkd::Beanstalkd;
 
-let connection = Connection::new("localhost", 11300).unwrap();
-let mut tube = Tube::new(connection, "default");
-tube.put(b"Hello World \n This is a new line!", 0, 0, 10000);
+fn main() {
+    let mut beanstalkd = Beanstalkd::localhost().unwrap();
+    beanstalkd.put("Hello World", 0, 0, 10000);
+}
 ```
 
 #### Consumer
@@ -34,14 +35,16 @@ tube.put(b"Hello World \n This is a new line!", 0, 0, 10000);
 ```rs
 extern crate beanstalkd;
 
-use beanstalkd::{Connection, Tube};
+use beanstalkd::Beanstalkd;
 
-let connection = Connection::new("localhost", 11300).unwrap();
-let mut tube = Tube::new(connection, "default");
-match tube.reserve().unwrap() {
-    Some((id, body)) => tube.delete(id),
-    None => {},
-};
+fn main() {
+    let mut beanstalkd = Beanstalkd::localhost().unwrap();
+    loop {
+        let (id, body) = beanstalkd.reserve().unwrap();
+        println!("{}", body);
+        beanstalkd.delete(id);
+    }
+}
 ```
 
 #### IronMQ example

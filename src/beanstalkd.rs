@@ -10,10 +10,6 @@ pub struct Beanstalkd {
 }
 
 impl Beanstalkd {
-    pub fn localhost() -> BeanstalkdResult<Beanstalkd> {
-        Beanstalkd::connect("localhost", 11300)
-    }
-
     pub fn connect(host: &str, port: u16) -> BeanstalkdResult<Beanstalkd> {
         let tcp_stream = match TcpStream::connect((host, port)) {
             Ok(s) => s,
@@ -21,6 +17,11 @@ impl Beanstalkd {
         };
         let instance = Beanstalkd { stream: BufferedStream::new(tcp_stream) };
         Ok(instance)
+    }
+
+    /// Short hand method to connect to `localhost:11300`
+    pub fn localhost() -> BeanstalkdResult<Beanstalkd> {
+        Beanstalkd::connect("localhost", 11300)
     }
 
     pub fn tube(&mut self, tube: &str) -> BeanstalkdResult<()> {

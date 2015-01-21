@@ -22,8 +22,6 @@ impl<'a> Request<'a> {
             Err(_) => { return Err(BeanstalkdError::RequestError); },
         };
 
-        println!("{}", line);
-
         let trimmed_line = line.as_slice().trim_right();
         let fields: Vec<&str> = trimmed_line.split(' ').collect();
 
