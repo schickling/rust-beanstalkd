@@ -10,6 +10,9 @@ pub struct Beanstalkd {
 }
 
 impl Beanstalkd {
+    /// Connect to a running beanstalkd server
+    ///
+    /// Example: `let mut beanstalkd = Beanstalkd::connect('localhost', 11300).unwrap();`
     pub fn connect(host: &str, port: u16) -> BeanstalkdResult<Beanstalkd> {
         let tcp_stream = match TcpStream::connect((host, port)) {
             Ok(s) => s,
@@ -24,6 +27,7 @@ impl Beanstalkd {
         Beanstalkd::connect("localhost", 11300)
     }
 
+    /// Change the tube where put new messages (Standard tube is called `default`)
     pub fn tube(&mut self, tube: &str) -> BeanstalkdResult<()> {
         match self.cmd(commands::tube(tube), false) {
             Ok(_) => Ok(()),
@@ -31,6 +35,7 @@ impl Beanstalkd {
         }
     }
 
+    /// Inserts a job into the client's currently used tube
     pub fn put (&mut self, body: &str, priority: u32, delay: u32, ttr: u32) -> BeanstalkdResult<u64> {
         match self.cmd(commands::put(body, priority, delay, ttr), false) {
             Ok(r) => Ok(r.id.unwrap()),
@@ -38,6 +43,7 @@ impl Beanstalkd {
         }
     }
 
+    /// Get the next message out of the queue
     pub fn reserve (&mut self) -> BeanstalkdResult<(u64, String)> {
         match self.cmd(commands::reserve(), true) {
             Ok(r) => Ok((r.id.unwrap(), r.body.unwrap())),
@@ -45,6 +51,7 @@ impl Beanstalkd {
         }
     }
 
+    /// Deletes a message out of the queue
     pub fn delete(&mut self, id: u64) -> BeanstalkdResult<()> {
         match self.cmd(commands::delete(id), false) {
             Ok(_) => Ok(()),

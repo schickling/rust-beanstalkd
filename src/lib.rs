@@ -1,11 +1,8 @@
 //! # Easy-to-use beanstalkd client for Rust (IronMQ compatible)
 //!
-//!
-//! ## Usage
-//!
 //! #### Producer
 //!
-//! ```rs
+//! ```
 //! extern crate beanstalkd;
 //!
 //! use beanstalkd::Beanstalkd;
@@ -18,7 +15,7 @@
 //!
 //! #### Consumer
 //!
-//! ```rs
+//! ```
 //! extern crate beanstalkd;
 //!
 //! use beanstalkd::Beanstalkd;
