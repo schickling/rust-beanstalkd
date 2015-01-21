@@ -7,7 +7,7 @@ Easy-to-use beanstalkd client for Rust (IronMQ compatible)
 
 Add this dependency to your `Cargo.toml`
 
-```
+```toml
 beanstalkd = "*"
 ```
 
