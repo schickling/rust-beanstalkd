@@ -9,7 +9,7 @@ pub struct Connection {
 }
 
 impl Connection {
-    pub fn new (host: &str, port: u16) -> BeanstalkdResult<Connection> {
+    pub fn new(host: &str, port: u16) -> BeanstalkdResult<Connection> {
         let tcp_stream = match TcpStream::connect((host, port)) {
             Ok(s) => s,
             Err(_) => { return Err(BeanstalkdError) },

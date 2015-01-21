@@ -1,3 +1,5 @@
+#![allow(unstable)]
+
 pub use connection::Connection;
 pub use error::BeanstalkdResult;
 pub use tube::Tube;
