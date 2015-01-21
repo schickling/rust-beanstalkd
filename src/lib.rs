@@ -1,35 +1,4 @@
 //! # Easy-to-use beanstalkd client for Rust (IronMQ compatible)
-//!
-//! #### Producer
-//!
-//! ```
-//! extern crate beanstalkd;
-//!
-//! use beanstalkd::Beanstalkd;
-//!
-//! fn main() {
-//!     let mut beanstalkd = Beanstalkd::localhost().unwrap();
-//!     beanstalkd.put("Hello World", 0, 0, 10000);
-//! }
-//! ```
-//!
-//! #### Consumer
-//!
-//! ```
-//! extern crate beanstalkd;
-//!
-//! use beanstalkd::Beanstalkd;
-//!
-//! fn main() {
-//!     let mut beanstalkd = Beanstalkd::localhost().unwrap();
-//!     loop {
-//!         let (id, body) = beanstalkd.reserve().unwrap();
-//!         println!("{}", body);
-//!         beanstalkd.delete(id);
-//!     }
-//! }
-//! ```
-//!
 
 #![allow(unstable)]
 
