@@ -1,6 +1,6 @@
 use std::error::Error;
 
-#[deriving(PartialEq, Eq, Clone, Show)]
+#[derive(PartialEq, Eq, Clone, Show)]
 pub struct BeanstalkdError;
 
 impl Error for BeanstalkdError {

@@ -9,7 +9,7 @@ pub struct Request<'a> {
 }
 
 impl<'a> Request<'a> {
-    pub fn new<'a> (stream: &'a mut BufferedStream<TcpStream>) -> Request {
+    pub fn new<'b> (stream: &'b mut BufferedStream<TcpStream>) -> Request {
         Request { stream: stream }
     }
 
@@ -52,14 +52,13 @@ impl<'a> Request<'a> {
                     return Err(BeanstalkdError);
                 }
 
-                let num_bytes: usize = FromStr::from_str(fields[fields.len()-1]).unwrap();
+                let num_bytes: usize = FromStr::from_str(fields[fields.len() - 1]).unwrap();
                 let utf8_payload = self.stream.read_exact(num_bytes + 2).unwrap();
                 let payload = String::from_utf8(utf8_payload).unwrap().as_slice().trim_right().to_string();
                 body = Some(payload);
             }
         }
 
-        let response = Response::new(status, id, body);
-        Ok(response)
+        Ok(Response::new(status, id, body))
     }
 }
