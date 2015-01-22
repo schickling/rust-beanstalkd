@@ -7,6 +7,10 @@ use parse;
 use request::Request;
 use response::Response;
 
+macro_rules! try {
+    ($e:expr) => (match $e { Ok(e) => e, Err(_) => return Err(BeanstalkdError::RequestError) })
+}
+
 pub struct Beanstalkd {
     stream: BufferedStream<TcpStream>,
 }
@@ -16,12 +20,9 @@ impl Beanstalkd {
     ///
     /// Example: `let mut beanstalkd = Beanstalkd::connect('localhost', 11300).unwrap();`
     pub fn connect(host: &str, port: u16) -> BeanstalkdResult<Beanstalkd> {
-        let tcp_stream = match TcpStream::connect((host, port)) {
-            Ok(s) => s,
-            Err(_) => { return Err(BeanstalkdError::ConnectionError) },
-        };
-        let instance = Beanstalkd { stream: BufferedStream::new(tcp_stream) };
-        Ok(instance)
+        let tcp_stream = try!(TcpStream::connect((host, port)));
+
+        Ok(Beanstalkd { stream: BufferedStream::new(tcp_stream) })
     }
 
     /// Short hand method to connect to `localhost:11300`
