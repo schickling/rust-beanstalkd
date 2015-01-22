@@ -48,7 +48,7 @@ impl<'a> Request<'a> {
             let bytes_count: usize = try_option!(FromStr::from_str(*bytes_count_str));
             let payload_utf8 = try!(self.stream.read_exact(bytes_count + 2)); // +2 needed for trailing line break
             let payload_str = try!(str::from_utf8(payload_utf8.as_slice()));
-            data = data + payload_str.trim();
+            data = data + payload_str;
         }
 
         Ok(Response { status: status, data: data })
