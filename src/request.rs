@@ -1,8 +1,17 @@
 use std::io::{BufferedStream, TcpStream};
 use std::str::FromStr;
+use std::str;
 
 use error::{BeanstalkdError, BeanstalkdResult};
 use response::{Response, Status};
+
+macro_rules! try {
+    ($e:expr) => (match $e { Ok(e) => e, Err(_) => return Err(BeanstalkdError::RequestError) })
+}
+
+macro_rules! try_option {
+    ($e:expr) => (match $e { Some(e) => e, None => return Err(BeanstalkdError::RequestError) })
+}
 
 pub struct Request<'a> {
     stream: &'a mut BufferedStream<TcpStream>,
@@ -13,51 +22,35 @@ impl<'a> Request<'a> {
         Request { stream: stream }
     }
 
-    pub fn send (&mut self, message: &[u8], read_body: bool) -> BeanstalkdResult<Response> {
+    pub fn send (&mut self, message: &[u8]) -> BeanstalkdResult<Response> {
         self.stream.write(message);
         self.stream.flush();
 
-        let line = match self.stream.read_line() {
-            Ok(r) => r,
-            Err(_) => { return Err(BeanstalkdError::RequestError); },
-        };
-
-        let trimmed_line = line.as_slice().trim_right();
-        let fields: Vec<&str> = trimmed_line.split(' ').collect();
-
-        if fields.len() < 1 {
-            return Err(BeanstalkdError::RequestError);
-        }
-
-        let status = match fields[0] {
+        let line = try!(self.stream.read_line());
+        let line_segments: Vec<&str> = line.trim().split(' ').collect();
+        let status_str = try_option!(line_segments.first());
+        let status = match *status_str {
+            "OK" => Status::OK,
             "RESERVED" => Status::RESERVED,
             "INSERTED" => Status::INSERTED,
             "USING" => Status::USING,
             _ => { return Err(BeanstalkdError::RequestError) },
         };
+        let mut data = line.clone();
 
-        let mut id = None;
-        let mut body = None;
-
-        if status != Status::USING {
-            if fields.len() < 2 {
-                return Err(BeanstalkdError::RequestError);
-            }
-
-            id = FromStr::from_str(fields[1]);
-
-            if read_body {
-                if fields.len() < 3 {
-                    return Err(BeanstalkdError::RequestError);
-                }
-
-                let num_bytes: usize = FromStr::from_str(fields[fields.len() - 1]).unwrap();
-                let utf8_payload = self.stream.read_exact(num_bytes + 2).unwrap();
-                let payload = String::from_utf8(utf8_payload).unwrap().as_slice().trim_right().to_string();
-                body = Some(payload);
-            }
+        if status == Status::OK || status == Status::RESERVED {
+            let segment_offset = match status {
+                Status::OK => 1,
+                Status::RESERVED => 2,
+                _ => { return Err(BeanstalkdError::RequestError) },
+            };
+            let bytes_count_str = try_option!(line_segments.get(segment_offset));
+            let bytes_count: usize = try_option!(FromStr::from_str(*bytes_count_str));
+            let payload_utf8 = try!(self.stream.read_exact(bytes_count + 2)); // +2 needed for trailing line break
+            let payload_str = try!(str::from_utf8(payload_utf8.as_slice()));
+            data = data + payload_str.trim();
         }
 
-        Ok(Response::new(status, id, body))
+        Ok(Response { status: status, data: data })
     }
 }

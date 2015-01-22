@@ -1,7 +1,9 @@
+use std::collections::HashMap;
 use std::io::{BufferedStream, TcpStream};
 
-use error::{BeanstalkdError, BeanstalkdResult};
 use commands;
+use error::{BeanstalkdError, BeanstalkdResult};
+use parse;
 use request::Request;
 use response::Response;
 
@@ -29,39 +31,32 @@ impl Beanstalkd {
 
     /// Change the tube where put new messages (Standard tube is called `default`)
     pub fn tube(&mut self, tube: &str) -> BeanstalkdResult<()> {
-        match self.cmd(commands::tube(tube), false) {
-            Ok(_) => Ok(()),
-            Err(e) => Err(e),
-        }
+        self.cmd(commands::tube(tube)).map(|_| ())
     }
 
     /// Inserts a job into the client's currently used tube
     pub fn put (&mut self, body: &str, priority: u32, delay: u32, ttr: u32) -> BeanstalkdResult<u64> {
-        match self.cmd(commands::put(body, priority, delay, ttr), false) {
-            Ok(r) => Ok(r.id.unwrap()),
-            Err(e) => Err(e),
-        }
+        self.cmd(commands::put(body, priority, delay, ttr)).map(parse::id)
     }
 
     /// Get the next message out of the queue
     pub fn reserve (&mut self) -> BeanstalkdResult<(u64, String)> {
-        match self.cmd(commands::reserve(), true) {
-            Ok(r) => Ok((r.id.unwrap(), r.body.unwrap())),
-            Err(e) => Err(e),
-        }
+        self.cmd(commands::reserve()).map(|r| (parse::id(r.clone()), parse::body(r)))
     }
 
     /// Deletes a message out of the queue
     pub fn delete(&mut self, id: u64) -> BeanstalkdResult<()> {
-        match self.cmd(commands::delete(id), false) {
-            Ok(_) => Ok(()),
-            Err(e) => Err(e),
-        }
+        self.cmd(commands::delete(id)).map(|_| ())
     }
 
-    fn cmd(&mut self, message: String, read_body: bool) -> BeanstalkdResult<Response> {
+    /// Returns all available stats
+    pub fn stats(&mut self) -> BeanstalkdResult<HashMap<String, String>> {
+        self.cmd(commands::stats()).map(parse::hashmap)
+    }
+
+    fn cmd(&mut self, message: String) -> BeanstalkdResult<Response> {
         let mut request = Request::new(&mut self.stream);
 
-        request.send(message.as_bytes(), read_body)
+        request.send(message.as_bytes())
     }
 }

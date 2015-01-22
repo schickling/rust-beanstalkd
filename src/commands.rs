@@ -14,6 +14,10 @@ pub fn delete(id: u64) -> String {
     build("delete", vec!(id.to_string()), "")
 }
 
+pub fn stats() -> String {
+    build("stats", vec!(), "")
+}
+
 fn build(op: &str, args: Vec<String>, body: &str) -> String {
     let line_break = "\r\n";
     let space = " ";
@@ -50,4 +54,9 @@ fn reserve_test() {
 #[test]
 fn delete_test() {
     assert_eq!(delete(1), "delete 1\r\n".to_string());
+}
+
+#[test]
+fn stats_test() {
+    assert_eq!(stats(), "stats\r\n".to_string());
 }

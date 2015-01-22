@@ -5,7 +5,8 @@
 pub use beanstalkd::Beanstalkd;
 
 mod beanstalkd;
+mod commands;
 mod error;
+mod parse;
 mod request;
 mod response;
-mod commands;
