@@ -1,6 +1,5 @@
 #[derive(PartialEq, Show)]
 pub enum Status {
-    OK,
     RESERVED,
     INSERTED,
     USING,
