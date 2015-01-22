@@ -1,7 +1,7 @@
 use std::collections::HashMap;
 use std::str::FromStr;
 
-use response::{Response, Status};
+use response::Response;
 
 pub fn id(response: Response) -> u64 {
     let line_segments: Vec<&str> = response.data.trim().split(' ').collect();

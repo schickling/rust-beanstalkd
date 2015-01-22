@@ -8,7 +8,7 @@ use request::Request;
 use response::Response;
 
 macro_rules! try {
-    ($e:expr) => (match $e { Ok(e) => e, Err(_) => return Err(BeanstalkdError::RequestError) })
+    ($e:expr) => (match $e { Ok(e) => e, Err(_) => return Err(BeanstalkdError::ConnectionError) })
 }
 
 pub struct Beanstalkd {

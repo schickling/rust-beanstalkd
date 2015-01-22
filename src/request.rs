@@ -23,8 +23,8 @@ impl<'a> Request<'a> {
     }
 
     pub fn send (&mut self, message: &[u8]) -> BeanstalkdResult<Response> {
-        self.stream.write(message);
-        self.stream.flush();
+        let _ = self.stream.write(message);
+        let _ = self.stream.flush();
 
         let line = try!(self.stream.read_line());
         let line_segments: Vec<&str> = line.trim().split(' ').collect();
