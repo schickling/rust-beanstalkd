@@ -11,7 +11,7 @@ pub fn id(response: Response) -> u64 {
 
 pub fn body(response: Response) -> String {
     let body_start = response.data.trim().find('\n').unwrap() + 1;
-    response.data.trim().slice_from(body_start).to_string()
+    response.data.trim()[body_start..].to_string()
 }
 
 pub fn hashmap(response: Response) -> HashMap<String, String> {
