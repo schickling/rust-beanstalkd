@@ -4,5 +4,5 @@ use beanstalkd::Beanstalkd;
 
 fn main() {
     let mut beanstalkd = Beanstalkd::localhost().unwrap();
-    beanstalkd.put("Hello World", 0, 0, 10000);
+    let _ = beanstalkd.put("Hello World", 0, 0, 10000);
 }

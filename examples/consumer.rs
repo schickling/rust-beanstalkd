@@ -4,9 +4,7 @@ use beanstalkd::Beanstalkd;
 
 fn main() {
     let mut beanstalkd = Beanstalkd::localhost().unwrap();
-    loop {
-        let (id, body) = beanstalkd.reserve().unwrap();
-        println!("{}", body);
-        beanstalkd.delete(id);
-    }
+    let (id, body) = beanstalkd.reserve().unwrap();
+    println!("{}", body);
+    let _ = beanstalkd.delete(id);
 }
