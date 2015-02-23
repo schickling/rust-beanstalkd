@@ -1,7 +1,6 @@
 use std::net::TcpStream;
 use std::io::BufStream;
-//use std::io::{Write, BufRead};
-use std::io::prelude::*;
+use std::io::{Write, BufRead, Read, ReadExt};
 use std::str::FromStr;
 use std::str;
 
@@ -49,12 +48,10 @@ impl<'a> Request<'a> {
                 _ => { return Err(BeanstalkdError::RequestError) },
             };
             let bytes_count_str = try_option!(line_segments.get(segment_offset));
-            let bytes_count: usize = try!(FromStr::from_str(*bytes_count_str));
-            self.stream.consume(bytes_count + 2);
-            let mut payload_utf8 = [];
-            try!(self.stream.read(&mut payload_utf8)); // +2 needed for trailing line break
-            let payload_str = try!(str::from_utf8(payload_utf8.as_slice()));
-            data = data + payload_str;
+            let bytes_count: u64 = try!(FromStr::from_str(*bytes_count_str));
+            let mut payload = String::new();
+            try!(self.stream.take(bytes_count).read_to_string(&mut payload));
+            data = data + payload.as_slice();
         }
 
         Ok(Response { status: status, data: data })

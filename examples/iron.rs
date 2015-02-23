@@ -1,3 +1,5 @@
+#![feature(core)]
+
 extern crate beanstalkd;
 
 use beanstalkd::Beanstalkd;

@@ -1,7 +1,7 @@
 use std::collections::HashMap;
 use std::str::FromStr;
 
-use response::{Response,Status};
+use response::{Response};
 
 pub fn id(response: Response) -> u64 {
     let line_segments: Vec<&str> = response.data.trim().split(' ').collect();
@@ -27,19 +27,19 @@ pub fn hashmap(response: Response) -> HashMap<String, String> {
 
 #[test]
 fn id_test() {
-    let response = Response { status: Status::INSERTED, data: "INSERTED 3\r\n".to_string() };
+    let response = Response { status: ::response::Status::INSERTED, data: "INSERTED 3\r\n".to_string() };
     assert_eq!(id(response), 3);
 }
 
 #[test]
 fn body_test() {
-    let response = Response { status: Status::RESERVED, data: "RESERVED 3 4\r\ntest\r\nbody\r\n".to_string() };
+    let response = Response { status: ::response::Status::RESERVED, data: "RESERVED 3 4\r\ntest\r\nbody\r\n".to_string() };
     assert_eq!(body(response), "test\r\nbody".to_string());
 }
 
 #[test]
 fn hashmap_test() {
-    let response = Response { status: Status::INSERTED, data: "OK 15\r\n---\r\na: b\r\nc: d\r\n".to_string() };
+    let response = Response { status: ::response::Status::INSERTED, data: "OK 15\r\n---\r\na: b\r\nc: d\r\n".to_string() };
     let mut expected_hashmap = HashMap::new();
     expected_hashmap.insert("a".to_string(), "b".to_string());
     expected_hashmap.insert("c".to_string(), "d".to_string());
