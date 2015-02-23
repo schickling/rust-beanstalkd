@@ -1,5 +1,6 @@
 use std::collections::HashMap;
-use std::io::{BufferedStream, TcpStream};
+use std::net::TcpStream;
+use std::io::BufStream;
 
 use commands;
 use error::{BeanstalkdError, BeanstalkdResult};
@@ -12,7 +13,7 @@ macro_rules! try {
 }
 
 pub struct Beanstalkd {
-    stream: BufferedStream<TcpStream>,
+    stream: BufStream<TcpStream>,
 }
 
 impl Beanstalkd {
@@ -20,9 +21,9 @@ impl Beanstalkd {
     ///
     /// Example: `let mut beanstalkd = Beanstalkd::connect('localhost', 11300).unwrap();`
     pub fn connect(host: &str, port: u16) -> BeanstalkdResult<Beanstalkd> {
-        let tcp_stream = try!(TcpStream::connect((host, port)));
+        let tcp_stream = try!(TcpStream::connect(&(host, port)));
 
-        Ok(Beanstalkd { stream: BufferedStream::new(tcp_stream) })
+        Ok(Beanstalkd { stream: BufStream::new(tcp_stream) })
     }
 
     /// Short hand method to connect to `localhost:11300`

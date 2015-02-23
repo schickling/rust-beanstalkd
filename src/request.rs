@@ -1,4 +1,7 @@
-use std::io::{BufferedStream, TcpStream};
+use std::net::TcpStream;
+use std::io::BufStream;
+//use std::io::{Write, BufRead};
+use std::io::prelude::*;
 use std::str::FromStr;
 use std::str;
 
@@ -14,11 +17,11 @@ macro_rules! try_option {
 }
 
 pub struct Request<'a> {
-    stream: &'a mut BufferedStream<TcpStream>,
+    stream: &'a mut BufStream<TcpStream>,
 }
 
 impl<'a> Request<'a> {
-    pub fn new<'b> (stream: &'b mut BufferedStream<TcpStream>) -> Request {
+    pub fn new<'b> (stream: &'b mut BufStream<TcpStream>) -> Request {
         Request { stream: stream }
     }
 
@@ -26,7 +29,8 @@ impl<'a> Request<'a> {
         let _ = self.stream.write(message);
         let _ = self.stream.flush();
 
-        let line = try!(self.stream.read_line());
+        let mut line = String::new();
+        try!(self.stream.read_line(&mut line));
         let line_segments: Vec<&str> = line.trim().split(' ').collect();
         let status_str = try_option!(line_segments.first());
         let status = match *status_str {
@@ -45,8 +49,10 @@ impl<'a> Request<'a> {
                 _ => { return Err(BeanstalkdError::RequestError) },
             };
             let bytes_count_str = try_option!(line_segments.get(segment_offset));
-            let bytes_count: usize = try_option!(FromStr::from_str(*bytes_count_str));
-            let payload_utf8 = try!(self.stream.read_exact(bytes_count + 2)); // +2 needed for trailing line break
+            let bytes_count: usize = try!(FromStr::from_str(*bytes_count_str));
+            self.stream.consume(bytes_count + 2);
+            let mut payload_utf8 = [];
+            try!(self.stream.read(&mut payload_utf8)); // +2 needed for trailing line break
             let payload_str = try!(str::from_utf8(payload_utf8.as_slice()));
             data = data + payload_str;
         }
