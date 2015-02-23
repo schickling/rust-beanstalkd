@@ -2,7 +2,6 @@ use std::net::TcpStream;
 use std::io::BufStream;
 use std::io::{Write, BufRead, Read, ReadExt};
 use std::str::FromStr;
-use std::str;
 
 use error::{BeanstalkdError, BeanstalkdResult};
 use response::{Response, Status};
