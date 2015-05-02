@@ -1,7 +1,7 @@
 use std::error::Error;
 use std::fmt::{Display, Formatter};
 
-#[derive(Debug, Copy)]
+#[derive(Debug, Clone)]
 pub enum BeanstalkdError { ConnectionError, RequestError }
 
 impl Error for BeanstalkdError {
