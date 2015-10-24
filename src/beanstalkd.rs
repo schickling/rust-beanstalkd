@@ -1,6 +1,8 @@
+extern crate bufstream;
+
 use std::collections::HashMap;
 use std::net::TcpStream;
-use std::io::BufStream;
+use self::bufstream::BufStream;
 
 use commands;
 use error::{BeanstalkdError, BeanstalkdResult};
