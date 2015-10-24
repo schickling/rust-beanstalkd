@@ -24,11 +24,11 @@ fn build(op: &str, args: Vec<String>, body: &str) -> String {
     let mut message = String::new() + op;
 
     if args.len() > 0 {
-        message = message + space + args.connect(space).as_str();
+        message = message + space + &(args.join(space));
     }
 
     if body.len() > 0 {
-        message = message + space + body.len().to_string().as_str() + line_break + body;
+        message = message + space + &(body.len().to_string()) + line_break + body;
     }
 
     message = message + line_break;

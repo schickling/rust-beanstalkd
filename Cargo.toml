@@ -12,3 +12,6 @@ readme = "README.md"
 [lib]
 name = "beanstalkd"
 path = "src/lib.rs"
+
+[dependencies]
+bufstream = "*"

@@ -17,7 +17,7 @@ pub fn body(response: Response) -> String {
 pub fn hashmap(response: Response) -> HashMap<String, String> {
     let mut map = HashMap::new();
     for line in response.data.trim().split('\n').skip(2) {
-        let line_segments: Vec<&str> = line.trim().split_str(": ").collect();
+        let line_segments: Vec<&str> = line.trim().split(": ").collect();
         let key = line_segments[0].to_string();
         let value = line_segments[1].to_string();
         map.insert(key, value);
