@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="generator" content="rustdoc">
+    <meta name="description" content="API documentation for the Rust `Beanstalkd` struct in crate `beanstalkd`.">
+    <meta name="keywords" content="rust, rustlang, rust-lang, Beanstalkd">
+
+    <title>beanstalkd::Beanstalkd - Rust</title>
+
+    <link rel="stylesheet" type="text/css" href="../main.css">
+
+    
+    
+</head>
+<body class="rustdoc">
+    <!--[if lte IE 8]>
+    <div class="warning">
+        This old browser is unsupported and will most likely display funky
+        things.
+    </div>
+    <![endif]-->
+
+    
+
+    <nav class="sidebar">
+        
+        <p class='location'><a href='index.html'>beanstalkd</a></p><script>window.sidebarCurrent = {name: 'Beanstalkd', ty: 'struct', relpath: ''};</script><script defer src="sidebar-items.js"></script>
+    </nav>
+
+    <nav class="sub">
+        <form class="search-form js-only">
+            <div class="search-container">
+                <input class="search-input" name="search"
+                       autocomplete="off"
+                       placeholder="Click or press ‘S’ to search, ‘?’ for more options…"
+                       type="search">
+            </div>
+        </form>
+    </nav>
+
+    <section id='main' class="content struct">
+<h1 class='fqn'><span class='in-band'>Struct <a href='index.html'>beanstalkd</a>::<wbr><a class='struct' href=''>Beanstalkd</a></span><span class='out-of-band'><span id='render-detail'>
+            <a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">
+                [<span class='inner'>&#x2212;</span>]
+            </a>
+        </span><a id='src-16' class='srclink' href='../src/beanstalkd/beanstalkd.rs.html#17-19' title='goto source code'>[src]</a></span></h1>
+<pre class='rust struct'>pub struct Beanstalkd {
+    // some fields omitted
+}</pre><h2 id='methods'>Methods</h2><h3 class='impl'><code>impl <a class='struct' href='../beanstalkd/struct.Beanstalkd.html' title='beanstalkd::Beanstalkd'>Beanstalkd</a></code></h3><div class='impl-items'><h4 id='method.connect' class='method'><code>fn <a href='#method.connect' class='fnname'>connect</a>(host: &amp;<a href='https://doc.rust-lang.org/nightly/std/primitive.str.html'>str</a>, port: <a href='https://doc.rust-lang.org/nightly/std/primitive.u16.html'>u16</a>) -&gt; BeanstalkdResult&lt;<a class='struct' href='../beanstalkd/struct.Beanstalkd.html' title='beanstalkd::Beanstalkd'>Beanstalkd</a>&gt;</code></h4>
+<div class='docblock'><p>Connect to a running beanstalkd server</p>
+
+<p>Example: <code>let mut beanstalkd = Beanstalkd::connect(&#39;localhost&#39;, 11300).unwrap();</code></p>
+</div><h4 id='method.localhost' class='method'><code>fn <a href='#method.localhost' class='fnname'>localhost</a>() -&gt; BeanstalkdResult&lt;<a class='struct' href='../beanstalkd/struct.Beanstalkd.html' title='beanstalkd::Beanstalkd'>Beanstalkd</a>&gt;</code></h4>
+<div class='docblock'><p>Short hand method to connect to <code>localhost:11300</code></p>
+</div><h4 id='method.tube' class='method'><code>fn <a href='#method.tube' class='fnname'>tube</a>(&amp;mut self, tube: &amp;<a href='https://doc.rust-lang.org/nightly/std/primitive.str.html'>str</a>) -&gt; BeanstalkdResult&lt;<a href='https://doc.rust-lang.org/nightly/std/primitive.tuple.html'>()</a>&gt;</code></h4>
+<div class='docblock'><p>Change the tube where put new messages (Standard tube is called <code>default</code>)</p>
+</div><h4 id='method.put' class='method'><code>fn <a href='#method.put' class='fnname'>put</a>(&amp;mut self, body: &amp;<a href='https://doc.rust-lang.org/nightly/std/primitive.str.html'>str</a>, priority: <a href='https://doc.rust-lang.org/nightly/std/primitive.u32.html'>u32</a>, delay: <a href='https://doc.rust-lang.org/nightly/std/primitive.u32.html'>u32</a>, ttr: <a href='https://doc.rust-lang.org/nightly/std/primitive.u32.html'>u32</a>) -&gt; BeanstalkdResult&lt;<a href='https://doc.rust-lang.org/nightly/std/primitive.u64.html'>u64</a>&gt;</code></h4>
+<div class='docblock'><p>Inserts a job into the client&#39;s currently used tube</p>
+</div><h4 id='method.reserve' class='method'><code>fn <a href='#method.reserve' class='fnname'>reserve</a>(&amp;mut self) -&gt; BeanstalkdResult&lt;<a href='https://doc.rust-lang.org/nightly/std/primitive.tuple.html'>(<a href='https://doc.rust-lang.org/nightly/std/primitive.u64.html'>u64</a>, <a class='struct' href='https://doc.rust-lang.org/nightly/collections/string/struct.String.html' title='collections::string::String'>String</a>)</a>&gt;</code></h4>
+<div class='docblock'><p>Get the next message out of the queue</p>
+</div><h4 id='method.delete' class='method'><code>fn <a href='#method.delete' class='fnname'>delete</a>(&amp;mut self, id: <a href='https://doc.rust-lang.org/nightly/std/primitive.u64.html'>u64</a>) -&gt; BeanstalkdResult&lt;<a href='https://doc.rust-lang.org/nightly/std/primitive.tuple.html'>()</a>&gt;</code></h4>
+<div class='docblock'><p>Deletes a message out of the queue</p>
+</div><h4 id='method.stats' class='method'><code>fn <a href='#method.stats' class='fnname'>stats</a>(&amp;mut self) -&gt; BeanstalkdResult&lt;<a class='struct' href='https://doc.rust-lang.org/nightly/std/collections/hash/map/struct.HashMap.html' title='std::collections::hash::map::HashMap'>HashMap</a>&lt;<a class='struct' href='https://doc.rust-lang.org/nightly/collections/string/struct.String.html' title='collections::string::String'>String</a>, <a class='struct' href='https://doc.rust-lang.org/nightly/collections/string/struct.String.html' title='collections::string::String'>String</a>&gt;&gt;</code></h4>
+<div class='docblock'><p>Returns all available stats</p>
+</div></div></section>
+    <section id='search' class="content hidden"></section>
+
+    <section class="footer"></section>
+
+    <aside id="help" class="hidden">
+        <div>
+            <h1 class="hidden">Help</h1>
+
+            <div class="shortcuts">
+                <h2>Keyboard Shortcuts</h2>
+
+                <dl>
+                    <dt>?</dt>
+                    <dd>Show this help dialog</dd>
+                    <dt>S</dt>
+                    <dd>Focus the search field</dd>
+                    <dt>&larrb;</dt>
+                    <dd>Move up in search results</dd>
+                    <dt>&rarrb;</dt>
+                    <dd>Move down in search results</dd>
+                    <dt>&#9166;</dt>
+                    <dd>Go to active search result</dd>
+                </dl>
+            </div>
+
+            <div class="infos">
+                <h2>Search Tricks</h2>
+
+                <p>
+                    Prefix searches with a type followed by a colon (e.g.
+                    <code>fn:</code>) to restrict the search to a given type.
+                </p>
+
+                <p>
+                    Accepted types are: <code>fn</code>, <code>mod</code>,
+                    <code>struct</code>, <code>enum</code>,
+                    <code>trait</code>, <code>type</code>, <code>macro</code>,
+                    and <code>const</code>.
+                </p>
+
+                <p>
+                    Search functions by type signature (e.g.
+                    <code>vec -> usize</code>)
+                </p>
+            </div>
+        </div>
+    </aside>
+
+    
+
+    <script>
+        window.rootPath = "../";
+        window.currentCrate = "beanstalkd";
+        window.playgroundUrl = "";
+    </script>
+    <script src="../jquery.js"></script>
+    <script src="../main.js"></script>
+    
+    <script async src="../search-index.js"></script>
+</body>
+</html>
