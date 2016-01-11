@@ -2,7 +2,7 @@
 name = "beanstalkd"
 version = "0.3.2"
 authors = ["Johannes Schickling <schickling.j@gmail.com>"]
-license = "MIT"
+license = "MIT OR Apache-2.0"
 homepage = "https://github.com/schickling/rust-beanstalkd"
 repository = "https://github.com/schickling/rust-beanstalkd"
 description = "Easy-to-use beanstalkd client for Rust (IronMQ compatible)"
