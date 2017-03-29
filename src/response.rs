@@ -4,6 +4,7 @@ pub enum Status {
     RESERVED,
     INSERTED,
     USING,
+    DELETED,
 }
 
 #[derive(Clone)]
