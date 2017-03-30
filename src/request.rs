@@ -39,6 +39,7 @@ impl<'a> Request<'a> {
             "RESERVED" => Status::RESERVED,
             "INSERTED" => Status::INSERTED,
             "USING" => Status::USING,
+            "DELETED" => Status::DELETED,
             _ => { return Err(BeanstalkdError::RequestError) },
         };
         let mut data = line.clone();
