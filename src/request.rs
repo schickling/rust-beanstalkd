@@ -22,11 +22,11 @@ pub struct Request<'a> {
 }
 
 impl<'a> Request<'a> {
-    pub fn new<'b> (stream: &'b mut BufStream<TcpStream>) -> Request {
+    pub fn new<'b>(stream: &'b mut BufStream<TcpStream>) -> Request {
         Request { stream: stream }
     }
 
-    pub fn send (&mut self, message: &[u8]) -> BeanstalkdResult<Response> {
+    pub fn send(&mut self, message: &[u8]) -> BeanstalkdResult<Response> {
         let _ = self.stream.write(message);
         let _ = self.stream.flush();
 
@@ -40,7 +40,9 @@ impl<'a> Request<'a> {
             "INSERTED" => Status::INSERTED,
             "USING" => Status::USING,
             "DELETED" => Status::DELETED,
-            _ => { return Err(BeanstalkdError::RequestError) },
+            "WATCHING" => Status::WATCHING,
+            "NOT_IGNORED" => Status::NOT_IGNORED,
+            _ => return Err(BeanstalkdError::RequestError),
         };
         let mut data = line.clone();
 
@@ -48,7 +50,7 @@ impl<'a> Request<'a> {
             let segment_offset = match status {
                 Status::OK => 1,
                 Status::RESERVED => 2,
-                _ => { return Err(BeanstalkdError::RequestError) },
+                _ => return Err(BeanstalkdError::RequestError),
             };
             let bytes_count_str = try_option!(line_segments.get(segment_offset));
             let bytes_count: usize = try!(FromStr::from_str(*bytes_count_str));
@@ -59,6 +61,9 @@ impl<'a> Request<'a> {
             data = data + &payload_str;
         }
 
-        Ok(Response { status: status, data: data })
+        Ok(Response {
+            status: status,
+            data: data,
+        })
     }
 }
