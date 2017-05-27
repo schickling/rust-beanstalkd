@@ -5,6 +5,8 @@ pub enum Status {
     INSERTED,
     USING,
     DELETED,
+    WATCHING,
+    NOT_IGNORED,
 }
 
 #[derive(Clone)]

@@ -39,12 +39,17 @@ impl Beanstalkd {
     }
 
     /// Inserts a job into the client's currently used tube
-    pub fn put (&mut self, body: &str, priority: u32, delay: u32, ttr: u32) -> BeanstalkdResult<u64> {
+    pub fn put(&mut self,
+               body: &str,
+               priority: u32,
+               delay: u32,
+               ttr: u32)
+               -> BeanstalkdResult<u64> {
         self.cmd(commands::put(body, priority, delay, ttr)).map(parse::id)
     }
 
     /// Get the next message out of the queue
-    pub fn reserve (&mut self) -> BeanstalkdResult<(u64, String)> {
+    pub fn reserve(&mut self) -> BeanstalkdResult<(u64, String)> {
         self.cmd(commands::reserve()).map(|r| (parse::id(r.clone()), parse::body(r)))
     }
 
@@ -56,6 +61,16 @@ impl Beanstalkd {
     /// Returns all available stats
     pub fn stats(&mut self) -> BeanstalkdResult<HashMap<String, String>> {
         self.cmd(commands::stats()).map(parse::hashmap)
+    }
+
+    // Add new tube to watch list
+    pub fn watch(&mut self, tube: &str) -> BeanstalkdResult<u64> {
+        self.cmd(commands::watch(tube)).map(parse::id)
+    }
+
+    // Removes the named tube from the watch list for the current connection
+    pub fn ignore(&mut self, tube: &str) -> BeanstalkdResult<Option<u64>> {
+        self.cmd(commands::ignore(tube)).map(parse::count)
     }
 
     fn cmd(&mut self, message: String) -> BeanstalkdResult<Response> {
