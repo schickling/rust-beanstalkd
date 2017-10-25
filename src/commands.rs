@@ -28,6 +28,10 @@ pub fn ignore(tube: &str) -> String {
     build("ignore", vec![tube.to_string()], "")
 }
 
+pub fn release(id: u64, priority: u32, delay: u32) -> String {
+    build("release", vec![id.to_string(), priority.to_string(), delay.to_string()], "")
+}
+
 fn build(op: &str, args: Vec<String>, body: &str) -> String {
     let line_break = "\r\n";
     let space = " ";

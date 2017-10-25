@@ -73,6 +73,10 @@ impl Beanstalkd {
         self.cmd(commands::ignore(tube)).map(parse::count)
     }
 
+    pub fn release(&mut self, id: u64, priority: u32, delay: u32) -> BeanstalkdResult<String> {
+        self.cmd(commands::release(id, priority, delay)).map(parse::body)
+    }
+
     fn cmd(&mut self, message: String) -> BeanstalkdResult<Response> {
         let mut request = Request::new(&mut self.stream);
 
