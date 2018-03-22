@@ -12,6 +12,11 @@ pub fn reserve() -> String {
     build("reserve", vec![], "")
 }
 
+pub fn reserve_with_timeout(timeout: u32) -> String {
+    build("reserve-with-timeout", vec![timeout.to_string()], "")
+}
+
+
 pub fn delete(id: u64) -> String {
     build("delete", vec![id.to_string()], "")
 }

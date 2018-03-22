@@ -7,9 +7,10 @@ pub enum Status {
     DELETED,
     WATCHING,
     NOT_IGNORED,
+    TIMED_OUT,
 }
 
-#[derive(Clone)]
+#[derive(Clone, Debug)]
 pub struct Response {
     pub status: Status,
     pub data: String,
