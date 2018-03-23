@@ -62,6 +62,17 @@ impl Beanstalkd {
         }
     }
 
+    pub fn bury(&mut self, id: u64, priority: u32) -> BeanstalkdResult<(u64, String)> {
+        let ret = self.cmd(commands::bury(id, priority)).unwrap();
+        if ret.status == Status::NOT_FOUND {
+            Ok((0u64, "NOT_FOUND".to_string()))
+        } else if ret.status == Status::BURIED {
+            Ok((id, "BURIED".to_string()))
+        } else {
+            Err(BeanstalkdError::RequestError)
+        }
+    }
+
     /// Deletes a message out of the queue
     pub fn delete(&mut self, id: u64) -> BeanstalkdResult<()> {
         self.cmd(commands::delete(id)).map(|_| ())
@@ -84,7 +95,6 @@ impl Beanstalkd {
 
     fn cmd(&mut self, message: String) -> BeanstalkdResult<Response> {
         let mut request = Request::new(&mut self.stream);
-
         request.send(message.as_bytes())
     }
 }

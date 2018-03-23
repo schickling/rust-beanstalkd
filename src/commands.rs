@@ -16,6 +16,9 @@ pub fn reserve_with_timeout(timeout: u32) -> String {
     build("reserve-with-timeout", vec![timeout.to_string()], "")
 }
 
+pub fn bury(id: u64, priority: u32) -> String {
+    build("bury", vec![id.to_string(), priority.to_string()], "")
+}
 
 pub fn delete(id: u64) -> String {
     build("delete", vec![id.to_string()], "")

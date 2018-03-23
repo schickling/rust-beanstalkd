@@ -44,14 +44,18 @@ impl<'a> Request<'a> {
             "WATCHING" => Status::WATCHING,
             "NOT_IGNORED" => Status::NOT_IGNORED,
             "TIMED_OUT" => Status::TIMED_OUT,
+            "FOUND" => Status::FOUND,
+            "NOT_FOUND" => Status::NOT_FOUND,
+            "BURIED" => Status::BURIED,
             _ => return Err(BeanstalkdError::RequestError),
         };
         let mut data = line.clone();
 
-        if status == Status::OK || status == Status::RESERVED {
+        if status == Status::OK || status == Status::RESERVED || status == Status::FOUND {
             let segment_offset = match status {
                 Status::OK => 1,
                 Status::RESERVED => 2,
+                Status::FOUND => 2,
                 _ => return Err(BeanstalkdError::RequestError),
             };
             let bytes_count_str = try_option!(line_segments.get(segment_offset));
@@ -62,7 +66,7 @@ impl<'a> Request<'a> {
             let payload_str = try!(from_utf8(&payload_utf8));
             data = data + &payload_str;
         }
-
+        println!("data {}", data);
         Ok(Response {
             status: status,
             data: data,
