@@ -1,13 +1,18 @@
 [package]
 name = "beanstalkd"
-version = "0.3.2"
+version = "0.4.0"
 authors = ["Johannes Schickling <schickling.j@gmail.com>"]
 license = "MIT OR Apache-2.0"
 homepage = "https://github.com/schickling/rust-beanstalkd"
 repository = "https://github.com/schickling/rust-beanstalkd"
+documentation = "https://docs.rs/crate/beanstalkd"
 description = "Easy-to-use beanstalkd client for Rust (IronMQ compatible)"
 keywords = ["beanstalkd", "queue", "worker", "ironmq"]
+categories = ["network-programming"]
 readme = "README.md"
+
+[badges]
+travis-ci = { repository = "schickling/rust-beanstalkd", branch = "master" }
 
 [lib]
 name = "beanstalkd"
