@@ -1,6 +1,6 @@
 [package]
 name = "beanstalkd"
-version = "0.4.0"
+version = "0.4.1"
 authors = ["Johannes Schickling <schickling.j@gmail.com>"]
 license = "MIT OR Apache-2.0"
 homepage = "https://github.com/schickling/rust-beanstalkd"
