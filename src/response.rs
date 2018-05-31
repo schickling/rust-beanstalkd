@@ -1,3 +1,4 @@
+#[allow(non_camel_case_types)]
 #[derive(PartialEq, Debug, Clone)]
 pub enum Status {
     OK,
