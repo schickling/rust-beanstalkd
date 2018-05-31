@@ -19,4 +19,4 @@ name = "beanstalkd"
 path = "src/lib.rs"
 
 [dependencies]
-bufstream = "*"
+bufstream = "0.1"
