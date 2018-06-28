@@ -8,6 +8,29 @@ pub fn put(body: &str, priority: u32, delay: u32, ttr: u32) -> String {
           body)
 }
 
+pub fn put_u8(body: &Vec<u8>, priority: u32, delay: u32, ttr: u32) -> String {
+    let args = vec![priority.to_string(), delay.to_string(), ttr.to_string()];
+    let line_break = "\r\n";
+    let space = " ";
+    let mut message = String::from("put");
+
+    if args.len() > 0 {
+        message = message + space + &(args.join(space));
+    }
+
+    if body.len() > 0 {
+        message = message + space + &(body.len().to_string()) + line_break;
+    }
+    let u8body = unsafe {
+        String::from_utf8_unchecked(body.clone())
+    };
+    message.push_str(u8body.as_str());
+
+    message = message + line_break;
+
+    message  
+}
+
 pub fn reserve() -> String {
     build("reserve", vec![], "")
 }

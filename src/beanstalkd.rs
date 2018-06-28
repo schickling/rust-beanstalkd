@@ -48,6 +48,15 @@ impl Beanstalkd {
         self.cmd(commands::put(body, priority, delay, ttr)).map(parse::id)
     }
 
+    pub fn put_u8(&mut self,
+               body: &Vec<u8>,
+               priority: u32,
+               delay: u32,
+               ttr: u32)
+               -> BeanstalkdResult<u64> {
+        self.cmd(commands::put_u8(body, priority, delay, ttr)).map(parse::id)
+    }
+
     /// Get the next message out of the queue
     pub fn reserve(&mut self) -> BeanstalkdResult<(u64, String)> {
         self.cmd(commands::reserve()).map(|r| (parse::id(r.clone()), parse::body(r)))
