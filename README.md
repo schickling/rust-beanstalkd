@@ -1,5 +1,6 @@
 rust-beanstalkd [![Build Status](https://travis-ci.org/schickling/rust-beanstalkd.svg)](https://travis-ci.org/schickling/rust-beanstalkd)
 ===============
+[![Crates.io](https://img.shields.io/crates/v/beanstalkd.svg)](https://crates.io/crates/beanstalkd)
 
 Easy-to-use beanstalkd client for Rust (IronMQ compatible)
 
