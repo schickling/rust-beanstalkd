@@ -63,12 +63,12 @@ impl Beanstalkd {
         self.cmd(commands::stats()).map(parse::hashmap)
     }
 
-    // Add new tube to watch list
+    /// Add new tube to watch list
     pub fn watch(&mut self, tube: &str) -> BeanstalkdResult<u64> {
         self.cmd(commands::watch(tube)).map(parse::id)
     }
 
-    // Removes the named tube from the watch list for the current connection
+    /// Removes the named tube from the watch list for the current connection
     pub fn ignore(&mut self, tube: &str) -> BeanstalkdResult<Option<u64>> {
         self.cmd(commands::ignore(tube)).map(parse::count)
     }
