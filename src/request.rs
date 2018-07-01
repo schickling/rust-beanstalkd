@@ -34,6 +34,7 @@ impl<'a> Request<'a> {
         try!(self.stream.read_line(&mut line));
         let line_segments: Vec<&str> = line.trim().split(' ').collect();
         let status_str = try_option!(line_segments.first());
+        
         let status = match *status_str {
             "OK" => Status::OK,
             "RESERVED" => Status::RESERVED,
@@ -42,14 +43,19 @@ impl<'a> Request<'a> {
             "DELETED" => Status::DELETED,
             "WATCHING" => Status::WATCHING,
             "NOT_IGNORED" => Status::NOT_IGNORED,
+            "TIMED_OUT" => Status::TIMED_OUT,
+            "FOUND" => Status::FOUND,
+            "NOT_FOUND" => Status::NOT_FOUND,
+            "BURIED" => Status::BURIED,
             _ => return Err(BeanstalkdError::RequestError),
         };
         let mut data = line.clone();
 
-        if status == Status::OK || status == Status::RESERVED {
+        if status == Status::OK || status == Status::RESERVED || status == Status::FOUND {
             let segment_offset = match status {
                 Status::OK => 1,
                 Status::RESERVED => 2,
+                Status::FOUND => 2,
                 _ => return Err(BeanstalkdError::RequestError),
             };
             let bytes_count_str = try_option!(line_segments.get(segment_offset));
@@ -60,7 +66,7 @@ impl<'a> Request<'a> {
             let payload_str = try!(from_utf8(&payload_utf8));
             data = data + &payload_str;
         }
-
+        println!("data {}", data);
         Ok(Response {
             status: status,
             data: data,

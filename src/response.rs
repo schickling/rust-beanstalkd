@@ -8,9 +8,13 @@ pub enum Status {
     DELETED,
     WATCHING,
     NOT_IGNORED,
+    TIMED_OUT,
+    FOUND,
+    NOT_FOUND,
+    BURIED,
 }
 
-#[derive(Clone)]
+#[derive(Clone, Debug)]
 pub struct Response {
     pub status: Status,
     pub data: String,
