@@ -14,7 +14,7 @@ beanstalkd = "*"
 
 ## Documentation
 
-More documentation can be found [here](http://schickling.me/rust-beanstalkd).
+More documentation can be found [here](https://docs.rs/beanstalkd).
 
 ## Usage
 
