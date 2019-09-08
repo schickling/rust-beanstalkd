@@ -12,6 +12,10 @@ pub fn reserve() -> String {
     build("reserve", vec![], "")
 }
 
+pub fn reserve_with_timeout(timeout: u64) -> String {
+    build("reserve-with-timeout", vec![timeout.to_string()], "")
+}
+
 pub fn delete(id: u64) -> String {
     build("delete", vec![id.to_string()], "")
 }
@@ -60,6 +64,11 @@ fn put_test() {
 #[test]
 fn reserve_test() {
     assert_eq!(reserve(), "reserve\r\n".to_string());
+}
+
+#[test]
+fn reserve_with_timeout_test() {
+    assert_eq!(reserve_with_timeout(10), "reserve-with-timeout 10\r\n".to_string())
 }
 
 #[test]

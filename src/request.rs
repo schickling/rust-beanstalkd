@@ -42,9 +42,17 @@ impl<'a> Request<'a> {
             "DELETED" => Status::DELETED,
             "WATCHING" => Status::WATCHING,
             "NOT_IGNORED" => Status::NOT_IGNORED,
+            "TIMED_OUT" => Status::TIMED_OUT,
             _ => return Err(BeanstalkdError::RequestError),
         };
         let mut data = line.clone();
+
+        if status == Status::TIMED_OUT {
+            return Ok(Response {
+                status: status,
+                data: String::from("TIMED_OUT 0 9\r\nTIMED_OUT\r\n"),
+            })
+        }
 
         if status == Status::OK || status == Status::RESERVED {
             let segment_offset = match status {
