@@ -54,7 +54,7 @@ impl Beanstalkd {
     }
 
     /// Get the next message out of the queue with timeout. If the timeout runs out a
-    /// ReserveError is returned
+    /// id: 0 and body: TIMED_OUT is returned.
     pub fn reserve_with_timeout(&mut self, timeout: u64) -> BeanstalkdResult<(u64, String)> {
         self.cmd(commands::reserve_with_timeout(timeout)).map(|r| (parse::id(r.clone()), parse::body(r)))
     } 
