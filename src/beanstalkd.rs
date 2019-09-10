@@ -8,7 +8,7 @@ use commands;
 use error::{BeanstalkdError, BeanstalkdResult};
 use parse;
 use request::Request;
-use response::Response;
+use response::{Response};
 
 macro_rules! try {
     ($e:expr) => (match $e { Ok(e) => e, Err(_) => return Err(BeanstalkdError::ConnectionError) })
@@ -53,10 +53,18 @@ impl Beanstalkd {
         self.cmd(commands::reserve()).map(|r| (parse::id(r.clone()), parse::body(r)))
     }
 
-    /// Get the next message out of the queue with timeout. If the timeout runs out a
-    /// id: 0 and body: TIMED_OUT is returned.
-    pub fn reserve_with_timeout(&mut self, timeout: u64) -> BeanstalkdResult<(u64, String)> {
-        self.cmd(commands::reserve_with_timeout(timeout)).map(|r| (parse::id(r.clone()), parse::body(r)))
+    /// Get the next message out of the queue with timeout. If the timeout runs out a None is returned
+    /// in BeanstalkdResult.
+    pub fn reserve_with_timeout(&mut self, timeout: u64) -> BeanstalkdResult<Option<(u64, String)>> {
+        self.cmd(commands::reserve_with_timeout(timeout))
+            .map(|r| (parse::id(r.clone()), parse::body(r)))
+            .map(|(id, body)| {
+                if id == 0 {
+                    None
+                } else {
+                    Some((id, body))
+                }
+        })
     } 
 
     /// Deletes a message out of the queue
