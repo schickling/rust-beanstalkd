@@ -71,6 +71,10 @@ impl Beanstalkd {
         self.cmd(commands::delete(id)).map(|_| ())
     }
 
+    pub fn release(&mut self, id: u64, priority: u32, delay: u32) -> BeanstalkdResult<()> {
+        self.cmd(commands::release(id, priority, delay)).map(|_| ())
+    }
+
     /// Returns all available stats
     pub fn stats(&mut self) -> BeanstalkdResult<HashMap<String, String>> {
         self.cmd(commands::stats()).map(parse::hashmap)
