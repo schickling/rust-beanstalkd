@@ -12,8 +12,24 @@ pub fn reserve() -> String {
     build("reserve", vec![], "")
 }
 
+pub fn reserve_with_timeout(timeout: u64) -> String {
+    build("reserve-with-timeout", vec![timeout.to_string()], "")
+}
+
 pub fn delete(id: u64) -> String {
     build("delete", vec![id.to_string()], "")
+}
+
+pub fn release(id: u64, priority: u32, delay: u32) -> String {
+    build("release", vec![id.to_string(), priority.to_string(), delay.to_string()], "")
+}
+
+pub fn bury(id: u64, priority: u32) -> String {
+    build("bury", vec![id.to_string(), priority.to_string()], "")
+}
+
+pub fn touch(id: u64) -> String {
+    build("touch", vec![id.to_string()], "")
 }
 
 pub fn stats() -> String {
@@ -63,8 +79,28 @@ fn reserve_test() {
 }
 
 #[test]
+fn reserve_with_timeout_test() {
+    assert_eq!(reserve_with_timeout(10), "reserve-with-timeout 10\r\n".to_string())
+}
+
+#[test]
 fn delete_test() {
     assert_eq!(delete(1), "delete 1\r\n".to_string());
+}
+
+#[test]
+fn release_test() {
+    assert_eq!(release(1, 1024, 10), "release 1 1024 10\r\n".to_string());
+}
+
+#[test]
+fn bury_test() {
+    assert_eq!(bury(1, 1024), "bury 1 1024\r\n".to_string());
+}
+
+#[test]
+fn touch_test() {
+    assert_eq!(touch(1), "touch 1\r\n".to_string());
 }
 
 #[test]
