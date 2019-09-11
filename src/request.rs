@@ -50,7 +50,7 @@ impl<'a> Request<'a> {
         if status == Status::TIMED_OUT {
             return Ok(Response {
                 status: status,
-                data: String::from("TIMED_OUT 0 9\r\nTIMED_OUT\r\n"),
+                data: "".to_owned(),
             })
         }
 
