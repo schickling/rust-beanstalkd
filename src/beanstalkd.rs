@@ -79,6 +79,10 @@ impl Beanstalkd {
         self.cmd(commands::bury(id, priority)).map(|_| ())
     }
 
+    pub fn touch(&mut self, id: u64) -> BeanstalkdResult<()> {
+        self.cmd(commands::touch(id)).map(|_| ())
+    }
+
     /// Returns all available stats
     pub fn stats(&mut self) -> BeanstalkdResult<HashMap<String, String>> {
         self.cmd(commands::stats()).map(parse::hashmap)

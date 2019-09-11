@@ -28,6 +28,10 @@ pub fn bury(id: u64, priority: u32) -> String {
     build("bury", vec![id.to_string(), priority.to_string()], "")
 }
 
+pub fn touch(id: u64) -> String {
+    build("touch", vec![id.to_string()], "")
+}
+
 pub fn stats() -> String {
     build("stats", vec![], "")
 }
@@ -92,6 +96,11 @@ fn release_test() {
 #[test]
 fn bury_test() {
     assert_eq!(bury(1, 1024), "bury 1 1024\r\n".to_string());
+}
+
+#[test]
+fn touch_test() {
+    assert_eq!(touch(1), "touch 1\r\n".to_string());
 }
 
 #[test]
