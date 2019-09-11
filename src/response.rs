@@ -9,6 +9,7 @@ pub enum Status {
     WATCHING,
     NOT_IGNORED,
     TIMED_OUT,
+    RELEASED,
 }
 
 #[derive(Clone)]

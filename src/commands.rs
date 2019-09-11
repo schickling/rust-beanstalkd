@@ -20,6 +20,10 @@ pub fn delete(id: u64) -> String {
     build("delete", vec![id.to_string()], "")
 }
 
+pub fn release(id: u64, priority: u32, delay: u32) -> String {
+    build("release", vec![id.to_string(), priority.to_string(), delay.to_string()], "")
+}
+
 pub fn stats() -> String {
     build("stats", vec![], "")
 }
@@ -74,6 +78,11 @@ fn reserve_with_timeout_test() {
 #[test]
 fn delete_test() {
     assert_eq!(delete(1), "delete 1\r\n".to_string());
+}
+
+#[test]
+fn release_test() {
+    assert_eq!(release(1, 1024, 10), "release 1 1024 10\r\n".to_string());
 }
 
 #[test]
