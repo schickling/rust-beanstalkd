@@ -24,6 +24,10 @@ pub fn release(id: u64, priority: u32, delay: u32) -> String {
     build("release", vec![id.to_string(), priority.to_string(), delay.to_string()], "")
 }
 
+pub fn bury(id: u64, priority: u32) -> String {
+    build("bury", vec![id.to_string(), priority.to_string()], "")
+}
+
 pub fn stats() -> String {
     build("stats", vec![], "")
 }
@@ -83,6 +87,11 @@ fn delete_test() {
 #[test]
 fn release_test() {
     assert_eq!(release(1, 1024, 10), "release 1 1024 10\r\n".to_string());
+}
+
+#[test]
+fn bury_test() {
+    assert_eq!(bury(1, 1024), "bury 1 1024\r\n".to_string());
 }
 
 #[test]

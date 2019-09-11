@@ -10,6 +10,7 @@ pub enum Status {
     NOT_IGNORED,
     TIMED_OUT,
     RELEASED,
+    BURIED,
 }
 
 #[derive(Clone)]

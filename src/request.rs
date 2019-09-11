@@ -44,6 +44,7 @@ impl<'a> Request<'a> {
             "NOT_IGNORED" => Status::NOT_IGNORED,
             "TIMED_OUT" => Status::TIMED_OUT,
             "RELEASED" => Status::RELEASED,
+            "BURIED" => Status::BURIED,
             _ => return Err(BeanstalkdError::RequestError),
         };
         let mut data = line.clone();
