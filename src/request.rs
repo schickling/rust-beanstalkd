@@ -50,13 +50,6 @@ impl<'a> Request<'a> {
         };
         let mut data = line.clone();
 
-        if status == Status::TIMED_OUT {
-            return Ok(Response {
-                status: status,
-                data: "".to_owned(),
-            })
-        }
-
         if status == Status::OK || status == Status::RESERVED {
             let segment_offset = match status {
                 Status::OK => 1,
