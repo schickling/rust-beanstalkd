@@ -8,6 +8,7 @@ pub enum Status {
     DELETED,
     WATCHING,
     NOT_IGNORED,
+    TIMED_OUT,
 }
 
 #[derive(Clone)]
