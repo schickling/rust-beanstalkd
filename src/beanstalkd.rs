@@ -71,14 +71,17 @@ impl Beanstalkd {
         self.cmd(commands::delete(id)).map(|_| ())
     }
 
+    /// Release a job in the queue
     pub fn release(&mut self, id: u64, priority: u32, delay: u32) -> BeanstalkdResult<()> {
         self.cmd(commands::release(id, priority, delay)).map(|_| ())
     }
 
+    /// Bury a job in the queue
     pub fn bury(&mut self, id: u64, priority: u32) -> BeanstalkdResult<()> {
         self.cmd(commands::bury(id, priority)).map(|_| ())
     }
 
+    /// Touch a job in the queue
     pub fn touch(&mut self, id: u64) -> BeanstalkdResult<()> {
         self.cmd(commands::touch(id)).map(|_| ())
     }
