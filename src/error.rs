@@ -15,7 +15,7 @@ impl Error for BeanstalkdError {
 
 impl Display for BeanstalkdError {
     fn fmt(&self, formatter: &mut Formatter) -> ::std::fmt::Result {
-        self.description().fmt(formatter)
+        self.to_string().fmt(formatter)
     }
 }
 
