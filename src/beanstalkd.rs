@@ -48,6 +48,13 @@ impl Beanstalkd {
         self.cmd(commands::put(body, priority, delay, ttr)).map(parse::id)
     }
 
+    /// Peeks a job from the provided tube
+    pub fn peek(&mut self,
+                type_or_id: &str)
+                -> BeanstalkdResult<(u64, String)> {
+        self.cmd(commands::peek(type_or_id)).map(|r| (parse::id(r.clone()), parse::body(r)))
+    }
+
     /// Get the next message out of the queue
     pub fn reserve(&mut self) -> BeanstalkdResult<(u64, String)> {
         self.cmd(commands::reserve()).map(|r| (parse::id(r.clone()), parse::body(r)))

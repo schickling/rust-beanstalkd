@@ -5,13 +5,23 @@ use response::Response;
 
 pub fn id(response: Response) -> u64 {
     let line_segments: Vec<&str> = response.data.trim().split(' ').collect();
-    let id: u64 = FromStr::from_str(line_segments[1]).unwrap();
-    id
+
+    if line_segments.len() != 1 {
+        return FromStr::from_str(line_segments[1]).unwrap();
+    }
+
+    0
 }
 
 pub fn body(response: Response) -> String {
-    let body_start = response.data.trim().find('\n').unwrap() + 1;
-    response.data.trim()[body_start..].to_string()
+    let start_pos = response.data.trim().find('\n');
+    if !(start_pos.is_none()) {
+        let body_start = start_pos.unwrap() + 1;
+
+        response.data.trim()[body_start..].to_string()
+    } else {
+        "".to_string()
+    }
 }
 
 pub fn hashmap(response: Response) -> HashMap<String, String> {

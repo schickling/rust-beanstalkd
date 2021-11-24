@@ -8,6 +8,22 @@ pub fn put(body: &str, priority: u32, delay: u32, ttr: u32) -> String {
           body)
 }
 
+pub fn peek(peek_type_or_id: &str) -> String {
+    let mut cmd = "peek";
+
+    if peek_type_or_id == "ready" {
+        cmd = "peek-ready";
+    } else if peek_type_or_id == "delayed" {
+        cmd = "peek-delayed";
+    } else if peek_type_or_id == "buried" {
+        cmd = "peek-buried"
+    } else {
+        return build(cmd, vec![peek_type_or_id.to_string()], "")
+    }
+
+    build(cmd, vec![], "")
+}
+
 pub fn reserve() -> String {
     build("reserve", vec![], "")
 }
@@ -55,6 +71,14 @@ fn tube_test() {
 fn put_test() {
     assert_eq!(put("some message", 0, 2, 10000),
                "put 0 2 10000 12\r\nsome message\r\n".to_string());
+}
+
+#[test]
+fn peek_test() {
+    assert_eq!(peek("ready"), "peek-ready\r\n".to_string());
+    assert_eq!(peek("delayed"), "peek-delayed\r\n".to_string());
+    assert_eq!(peek("buried"), "peek-buried\r\n".to_string());
+    assert_eq!(peek("1"), "peek 1\r\n".to_string());
 }
 
 #[test]
